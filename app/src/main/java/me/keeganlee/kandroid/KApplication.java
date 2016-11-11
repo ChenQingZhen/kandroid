@@ -17,6 +17,8 @@ package me.keeganlee.kandroid;
 
 import android.app.Application;
 
+import com.zhy.http.okhttp.OkHttpUtils;
+
 import me.keeganlee.kandroid.core.AppAction;
 import me.keeganlee.kandroid.core.AppActionImpl;
 
@@ -33,6 +35,7 @@ public class KApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appAction = new AppActionImpl(this);
+
     }
 
     public AppAction getAppAction() {

@@ -18,6 +18,7 @@ package me.keeganlee.kandroid.api.net;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,6 +30,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
+
+import okhttp3.Response;
 
 /**
  * Http引擎处理类
@@ -55,6 +58,13 @@ public class HttpEngine {
             instance = new HttpEngine();
         }
         return instance;
+    }
+    public <T> T postOKHandle(Map<String, String> paramsMap, Type typeOfT) throws IOException {
+        Response response= OkHttpUtils.getInstance().post().params(paramsMap).build().execute();
+        if(response!=null&&response.isSuccessful()){
+         return new Gson().fromJson(response.body().string(),typeOfT);
+        }
+        return null;
     }
 
     public <T> T postHandle(Map<String, String> paramsMap, Type typeOfT) throws IOException {
