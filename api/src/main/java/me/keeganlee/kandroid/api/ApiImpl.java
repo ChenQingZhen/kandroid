@@ -15,11 +15,20 @@
  */
 package me.keeganlee.kandroid.api;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
+import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.https.HttpsUtils;
+
 import me.keeganlee.kandroid.api.net.HttpEngine;
 import me.keeganlee.kandroid.api.utils.EncryptUtil;
 import me.keeganlee.kandroid.model.CouponBO;
+import okhttp3.Call;
+import okhttp3.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -53,7 +62,7 @@ public class ApiImpl implements Api {
 
         Type type = new TypeToken<ApiResponse<Void>>(){}.getType();
         try {
-            return httpEngine.postHandle(paramMap, type);
+            return httpEngine.postOKHandle(paramMap, type);
         } catch (IOException e) {
             return new ApiResponse(TIME_OUT_EVENT, TIME_OUT_EVENT_MSG);
         }

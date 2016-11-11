@@ -59,10 +59,39 @@ public class HttpEngine {
         }
         return instance;
     }
+
+    public <T> T postOKHandle(String url,Map<String, String> paramsMap, Type typeOfT) throws IOException {
+
+        Response response= OkHttpUtils.getInstance().post().url(url).params(paramsMap).build().execute();
+        if(response!=null&&response.isSuccessful()){
+            return new Gson().fromJson(response.body().string(),typeOfT);
+        }
+        return null;
+    }
+
     public <T> T postOKHandle(Map<String, String> paramsMap, Type typeOfT) throws IOException {
-        Response response= OkHttpUtils.getInstance().post().params(paramsMap).build().execute();
+
+        Response response= OkHttpUtils.getInstance().post().url(SERVER_URL).params(paramsMap).build().execute();
         if(response!=null&&response.isSuccessful()){
          return new Gson().fromJson(response.body().string(),typeOfT);
+        }
+        return null;
+    }
+
+    public <T> T getOKHandle(Map<String, String> paramsMap, Type typeOfT) throws IOException {
+
+        Response response= OkHttpUtils.getInstance().get().url(SERVER_URL).params(paramsMap).build().execute();
+        if(response!=null&&response.isSuccessful()){
+            return new Gson().fromJson(response.body().string(),typeOfT);
+        }
+        return null;
+    }
+
+    public <T> T getOKHandle(String url,Map<String, String> paramsMap, Type typeOfT) throws IOException {
+
+        Response response= OkHttpUtils.getInstance().get().url(url).params(paramsMap).build().execute();
+        if(response!=null&&response.isSuccessful()){
+            return new Gson().fromJson(response.body().string(),typeOfT);
         }
         return null;
     }
