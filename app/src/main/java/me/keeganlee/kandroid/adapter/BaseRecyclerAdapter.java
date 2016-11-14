@@ -34,12 +34,6 @@ public abstract class BaseRecyclerAdapter<E,VH extends RecyclerView.ViewHolder> 
         mLayoutInflater=LayoutInflater.from(context);
     }
 
-//    @Override
-//    public void onBindViewHolder(VH holder, int position) {
-////        onBaseBindViewHolder((VH) holder,position);
-//    }
-//    public abstract void onBaseBindViewHolder(VH holder, int position);
-
     @Override
     public int getItemCount() {
         return mItemList.size();
