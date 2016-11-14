@@ -19,8 +19,11 @@ import android.app.Application;
 
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import me.keeganlee.kandroid.core.AppAction;
 import me.keeganlee.kandroid.core.AppActionImpl;
+import okhttp3.OkHttpClient;
 
 /**
  * Application类，应用级别的操作都放这里
@@ -35,7 +38,18 @@ public class KApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appAction = new AppActionImpl(this);
+        initOKHttp();
+    }
 
+    private void initOKHttp() {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                //其他配置
+                .build();
+
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     public AppAction getAppAction() {
