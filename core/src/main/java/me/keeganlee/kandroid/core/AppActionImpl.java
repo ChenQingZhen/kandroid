@@ -17,12 +17,15 @@ package me.keeganlee.kandroid.core;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import me.keeganlee.kandroid.api.Api;
 import me.keeganlee.kandroid.api.ApiImpl;
 import me.keeganlee.kandroid.api.ApiResponse;
+import me.keeganlee.kandroid.executor.JobExecutor;
 import me.keeganlee.kandroid.model.CouponBO;
 
 import java.util.List;
@@ -43,6 +46,8 @@ public class AppActionImpl implements AppAction {
 
     private Context context;
     private Api api;
+
+    private Handler handler=new Handler(Looper.getMainLooper());
 
     public AppActionImpl(Context context) {
         this.context = context;
@@ -66,25 +71,28 @@ public class AppActionImpl implements AppAction {
             }
             return;
         }
-
         // 请求Api
-        new AsyncTask<Void, Void, ApiResponse<Void>>() {
+        JobExecutor.getInstance().execute(new Runnable() {
             @Override
-            protected ApiResponse<Void> doInBackground(Void... voids) {
-                return api.sendSmsCode4Register(phoneNum);
-            }
-
-            @Override
-            protected void onPostExecute(ApiResponse<Void> response) {
-                if (listener != null && response != null) {
-                    if (response.isSuccess()) {
-                        listener.onSuccess(null);
-                    } else {
-                        listener.onFailure(response.getEvent(), response.getMsg());
+            public void run() {
+                final ApiResponse<Void> response= api.sendSmsCode4Register(phoneNum);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (listener != null && response != null) {
+                            if (response.isSuccess()) {
+                                listener.onSuccess(null);
+                            } else {
+                                listener.onFailure(response.getEvent(), response.getMsg());
+                            }
+                        }
                     }
-                }
+                });
             }
-        }.execute();
+        });
+
+
+
     }
 
     @Override
