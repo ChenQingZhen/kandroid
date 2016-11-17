@@ -15,11 +15,16 @@
  */
 package me.keeganlee.kandroid.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 import me.keeganlee.kandroid.KApplication;
+import me.keeganlee.kandroid.core.ActionCallbackListener;
 import me.keeganlee.kandroid.core.AppAction;
 
 /**
@@ -42,4 +47,35 @@ public abstract class KBaseActivity extends FragmentActivity {
         application = (KApplication) this.getApplication();
         appAction = application.getAppAction();
     }
+
+    public abstract class AbstractActionCallBack<T> implements ActionCallbackListener<T>{
+        @Override
+        public void onFailure(String errorEvent, String message) {
+            if(errorEvent.equals("替换成登录过期码")){
+                new AlertDialog.Builder(KBaseActivity.this)
+                        .setTitle("出错啦")
+                        .setMessage("Cookie过期，请重新登录")
+                        .setPositiveButton("确定",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        Intent intent = new Intent(
+                                                KBaseActivity.this,
+                                                LoginActivity.class);
+                                   //可以传一个参数判断登录成功后返回本页面还是跳转到其他页面
+                                        startActivity(intent);
+                                    }
+                                }).show();
+            }else{
+                showToast(message);
+            }
+        }
+    }
+
+    public void showToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    }
+
 }

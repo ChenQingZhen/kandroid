@@ -75,4 +75,5 @@ public abstract class BaseRecyclerAdapter<E,VH extends RecyclerView.ViewHolder> 
         mItemList.clear();
         notifyDataSetChanged();
     }
+
 }

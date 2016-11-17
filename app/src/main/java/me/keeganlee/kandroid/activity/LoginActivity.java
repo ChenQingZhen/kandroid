@@ -40,8 +40,10 @@ public class LoginActivity extends KBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //initVariables();
         // 初始化View
         initViews();
+        //loadData();
     }
 
     // 初始化View
