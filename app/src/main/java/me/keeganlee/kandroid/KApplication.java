@@ -21,6 +21,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import me.keeganlee.kandroid.api.net.GzipRequestInterceptor;
 import me.keeganlee.kandroid.core.AppAction;
 import me.keeganlee.kandroid.core.AppActionImpl;
 import okhttp3.OkHttpClient;
@@ -44,6 +45,7 @@ public class KApplication extends Application {
     private void initOKHttp() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new LoggerInterceptor("TAG"))
+//                .addInterceptor(new GzipRequestInterceptor())//Gzip压缩数据，如果有Gzip返回，OkHttp会处理
                 .connectTimeout(10000L, TimeUnit.MILLISECONDS)
                 .readTimeout(10000L, TimeUnit.MILLISECONDS)
                 //其他配置
