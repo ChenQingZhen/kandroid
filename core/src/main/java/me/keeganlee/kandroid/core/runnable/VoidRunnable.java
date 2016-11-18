@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package me.keeganlee.kandroid.core;
+package me.keeganlee.kandroid.core.runnable;
 
 import me.keeganlee.kandroid.api.ApiResponse;
+import me.keeganlee.kandroid.core.ActionCallbackListener;
 
 /**
- * 当T为非List对象的时候适用
+ * 当T为Void的时候适用
  * @param <T>
  */
-public class ObjRunnable<T> extends DefaultRunnable<T> {
-    public ObjRunnable(ActionCallbackListener listener, ApiResponse response) {
+public class VoidRunnable<T> extends DefaultRunnable<T> {
+    public VoidRunnable(ActionCallbackListener<T> listener, ApiResponse<T> response) {
         super(listener, response);
     }
 
     /**
-     * 请求接口成功后返回对象类型的数据
+     * 请求接口成功后没有返回数据
      * @param listener 给app层的回调
      * @param obj JSON解析的obj对象
      * @param objList JSON解析的objList对象
      */
     @Override
     public void onListenerSuccess(ActionCallbackListener<T> listener, T obj, T objList) {
-        listener.onSuccess(obj);
+            listener.onSuccess(null);
     }
 }

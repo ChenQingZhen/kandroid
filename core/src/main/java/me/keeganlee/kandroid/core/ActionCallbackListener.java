@@ -17,7 +17,7 @@ package me.keeganlee.kandroid.core;
 
 /**
  * Action的处理结果回调监听器
- *
+ *如果你不想回调就用这个{@link NullActionCallbackListener}
  * @author Keegan小钢
  * @date 15/6/25
  * @version 1.0

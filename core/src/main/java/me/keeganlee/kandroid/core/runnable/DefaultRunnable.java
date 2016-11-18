@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package me.keeganlee.kandroid.core;
+package me.keeganlee.kandroid.core.runnable;
 
 import java.util.List;
 
 import me.keeganlee.kandroid.api.ApiResponse;
+import me.keeganlee.kandroid.core.ActionCallbackListener;
 
 public abstract class DefaultRunnable<T> implements Runnable {
     protected ActionCallbackListener<T> listener;
@@ -31,7 +32,7 @@ public abstract class DefaultRunnable<T> implements Runnable {
 
     @Override
     public void run() {
-        if (listener != null && response != null) {
+        if (response != null) {
             if (response.isSuccess()) {
                 onListenerSuccess(listener,response.getObj(),response.getObjList());
             } else {

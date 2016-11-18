@@ -15,6 +15,8 @@
  */
 package me.keeganlee.kandroid.core;
 
+import android.support.annotation.NonNull;
+
 import me.keeganlee.kandroid.model.CouponBO;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public interface AppAction {
      * @param phoneNum 手机号
      * @param listener 回调监听器
      */
-    public void sendSmsCode(String phoneNum, ActionCallbackListener<Void> listener);
+    public void sendSmsCode(String phoneNum,@NonNull ActionCallbackListener<Void> listener);
 
     /**
      * 注册
@@ -43,7 +45,7 @@ public interface AppAction {
      * @param password 密码
      * @param listener 回调监听器
      */
-    public void register(String phoneNum, String code, String password, ActionCallbackListener<Void> listener);
+    public void register(String phoneNum, String code, String password,@NonNull ActionCallbackListener<Void> listener);
 
     /**
      * 登录
@@ -52,7 +54,7 @@ public interface AppAction {
      * @param password  密码
      * @param listener  回调监听器
      */
-    public void login(String loginName, String password, ActionCallbackListener<Void> listener);
+    public void login(String loginName, String password,@NonNull ActionCallbackListener<Void> listener);
 
     /**
      * 券列表
@@ -60,5 +62,5 @@ public interface AppAction {
      * @param currentPage 当前页数
      * @param listener    回调监听器
      */
-    public void listCoupon(int currentPage, ActionCallbackListener<List<CouponBO>> listener);
+    public void listCoupon(int currentPage,@NonNull ActionCallbackListener<List<CouponBO>> listener);
 }

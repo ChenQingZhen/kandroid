@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import me.keeganlee.kandroid.R;
 import me.keeganlee.kandroid.core.ActionCallbackListener;
+import me.keeganlee.kandroid.core.NullActionCallbackListener;
 
 /**
  * 登录
@@ -58,21 +59,8 @@ public class LoginActivity extends KBaseActivity {
         String loginName = phoneEdit.getText().toString();
         String password = passwordEdit.getText().toString();
         loginBtn.setEnabled(false);
-        this.appAction.login(loginName, password, new ActionCallbackListener<Void>() {
-            @Override
-            public void onSuccess(Void data) {
-                Toast.makeText(context, R.string.toast_login_success, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, CouponListActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        this.appAction.login(loginName, password, null);
 
-            @Override
-            public void onFailure(String errorEvent, String message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                loginBtn.setEnabled(true);
-            }
-        });
     }
 
     // 进入注册页

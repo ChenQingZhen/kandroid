@@ -16,27 +16,18 @@
 
 package me.keeganlee.kandroid.core;
 
-import java.util.List;
-
-import me.keeganlee.kandroid.api.ApiResponse;
-
 /**
- * 当T为List的时候适用
+ * 回调的空实现，不想回调的时候就传这个,如果你想回调还是使用{@link ActionCallbackListener}
  * @param <T>
  */
-public class ObjListRunnable<T> extends DefaultRunnable<T> {
-    public ObjListRunnable(ActionCallbackListener<T> listener, ApiResponse<T> response) {
-        super(listener, response);
+public final class NullActionCallbackListener<T> implements ActionCallbackListener<T> {
+    @Override
+    public void onSuccess(T data) {
+
     }
 
-    /**
-     * 请求接口成功后返回列表类型的数据
-     * @param listener 给app层的回调
-     * @param obj JSON解析的obj对象
-     * @param objList JSON解析的objList对象
-     */
     @Override
-    public void onListenerSuccess(ActionCallbackListener<T> listener, T obj, T objList) {
-        listener.onSuccess(objList);
+    public void onFailure(String errorEvent, String message) {
+
     }
 }

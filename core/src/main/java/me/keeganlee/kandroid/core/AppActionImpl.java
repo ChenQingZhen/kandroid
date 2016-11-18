@@ -16,15 +16,20 @@
 package me.keeganlee.kandroid.core;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.widget.BaseAdapter;
 
 import me.keeganlee.kandroid.api.Api;
 import me.keeganlee.kandroid.api.ApiImpl;
 import me.keeganlee.kandroid.api.ApiResponse;
 import me.keeganlee.kandroid.core.base.BaseAction;
+import me.keeganlee.kandroid.core.runnable.ObjListRunnable;
+import me.keeganlee.kandroid.core.runnable.VoidRunnable;
 import me.keeganlee.kandroid.executor.JobExecutor;
 import me.keeganlee.kandroid.model.CouponBO;
 
@@ -48,7 +53,6 @@ public class AppActionImpl extends BaseAction implements AppAction {
     private Api api;
 
 
-
     public AppActionImpl(Context context) {
         this.context = context;
         this.api = new ApiImpl();
@@ -58,13 +62,13 @@ public class AppActionImpl extends BaseAction implements AppAction {
     public void sendSmsCode(final String phoneNum, final ActionCallbackListener<Void> listener) {
         // 参数检查
         if (TextUtils.isEmpty(phoneNum)) {
-            onFailure(listener,ErrorEvent.PARAM_NULL, "手机号为空");
+                listener.onFailure(ErrorEvent.PARAM_NULL, "手机号为空");
             return;
         }
         Pattern pattern = Pattern.compile("1\\d{10}");
         Matcher matcher = pattern.matcher(phoneNum);
         if (!matcher.matches()) {
-            onFailure(listener,ErrorEvent.PARAM_ILLEGAL,"手机号不正确");
+                listener.onFailure(ErrorEvent.PARAM_ILLEGAL, "手机号不正确");
             return;
         }
         // 请求Api
@@ -76,27 +80,29 @@ public class AppActionImpl extends BaseAction implements AppAction {
             }
         });
 
+
+
     }
 
     @Override
     public void register(final String phoneNum, final String code, final String password, final ActionCallbackListener<Void> listener) {
         // 参数检查
         if (TextUtils.isEmpty(phoneNum)) {
-            onFailure(listener,ErrorEvent.PARAM_NULL,"手机号为空");
+                listener.onFailure(ErrorEvent.PARAM_NULL, "手机号为空");
             return;
         }
         if (TextUtils.isEmpty(code)) {
-            onFailure(listener,ErrorEvent.PARAM_NULL,"验证码为空");
+                listener.onFailure(ErrorEvent.PARAM_NULL, "验证码为空");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            onFailure(listener,ErrorEvent.PARAM_NULL,"密码为空");
+                listener.onFailure(ErrorEvent.PARAM_NULL, "密码为空");
             return;
         }
         Pattern pattern = Pattern.compile("1\\d{10}");
         Matcher matcher = pattern.matcher(phoneNum);
         if (!matcher.matches()) {
-            onFailure(listener,ErrorEvent.PARAM_ILLEGAL,"手机号不正确");
+                listener.onFailure(ErrorEvent.PARAM_ILLEGAL, "手机号不正确");
             return;
         }
 
@@ -104,32 +110,32 @@ public class AppActionImpl extends BaseAction implements AppAction {
         JobExecutor.getInstance().execute(new Runnable() {
             @Override
             public void run() {
-               ApiResponse<Void> response=  api.registerByPhone(phoneNum, code, password);
-                handler.post(new VoidRunnable<Void>(listener,response));
+                ApiResponse response= api.registerByPhone(phoneNum,code,password);
+                handler.post(new VoidRunnable<>(listener,response));
             }
         });
-
 
     }
 
     @Override
-    public void login(final String loginName, final String password, final ActionCallbackListener<Void> listener) {
+    public void login(final String loginName, final String password,@NonNull final ActionCallbackListener<Void> listener) {
         // 参数检查
         if (TextUtils.isEmpty(loginName)) {
-            onFailure(listener,ErrorEvent.PARAM_NULL,"登录名为空");
+                listener.onFailure(ErrorEvent.PARAM_NULL, "登录名为空");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            onFailure(listener,ErrorEvent.PARAM_NULL,"密码为空");
+                listener.onFailure(ErrorEvent.PARAM_NULL, "密码为空");
             return;
         }
+
         // 请求Api
         JobExecutor.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 String imei = telephonyManager.getDeviceId();
-                ApiResponse<Void> response=api.loginByApp(loginName, password, imei, LOGIN_OS);
+                ApiResponse<Void> response= api.loginByApp(loginName, password, imei, LOGIN_OS);
                 handler.post(new VoidRunnable<>(listener,response));
             }
         });
@@ -140,14 +146,14 @@ public class AppActionImpl extends BaseAction implements AppAction {
     public void listCoupon(final int currentPage, final ActionCallbackListener<List<CouponBO>> listener) {
         // 参数检查
         if (currentPage < 0) {
-            onFailure(listener,ErrorEvent.PARAM_ILLEGAL,"当前页数小于零");
+                listener.onFailure(ErrorEvent.PARAM_ILLEGAL, "当前页数小于零");
         }
 
         // 请求Api
         JobExecutor.getInstance().execute(new Runnable() {
             @Override
             public void run() {
-                ApiResponse<List<CouponBO>> response=api.listNewCoupon(currentPage, PAGE_SIZE);
+                ApiResponse<List<CouponBO>> response= api.listNewCoupon(currentPage, PAGE_SIZE);
                 handler.post(new ObjListRunnable<>(listener,response));
             }
         });
