@@ -59,7 +59,21 @@ public class LoginActivity extends KBaseActivity {
         String loginName = phoneEdit.getText().toString();
         String password = passwordEdit.getText().toString();
         loginBtn.setEnabled(false);
-        this.appAction.login(loginName, password, null);
+        this.appAction.login(loginName, password, new ActionCallbackListener<Void>() {
+            @Override
+            public void onSuccess(Void data) {
+                Toast.makeText(context, R.string.toast_login_success, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, CouponListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(String errorEvent, String message) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                loginBtn.setEnabled(true);
+            }
+        });
 
     }
 
